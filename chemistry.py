@@ -1,15 +1,48 @@
 from formula import parse_formula
+"""
+Enhancements
+
+- Creation of another function called computer_number_of_moles to calculate the number of moles
+
+- Use try to guide the user what went wrong
+"""
 
 def main():
-    pass
-    
+    try:
+        chemical_formula = input("Enter the chemical formula: ")
+        
+        sample_size_grams = float(input("Enter the sample size in grams: "))
+        
+        periodic_table_dict = make_periodic_table()
 
+        molecule_list = parse_formula(chemical_formula, periodic_table_dict)
+
+        molar_mass = compute_molar_mass(molecule_list, periodic_table_dict)
+
+        print(f"Molar mass of {chemical_formula} is {molar_mass:.5f} g/mol")
+
+        number_of_moles = compute_number_of_moles(molar_mass, sample_size_grams)
+
+        print(f"Number of moles: {number_of_moles:.5f}")
+    except ValueError as e:
+        # Captura erros de digitação numérica ou da fórmula
+        print(f"\nError: {e}")
+        print("Please ensure you entered a valid number and chemical formula.\n>Probably some letter needs to be in uppercase or lowercase, or that symbol doesn't exist.")
+    except Exception as e:
+        print(f"\nAn unexpected error occurred: {e}")
 
 def compute_molar_mass(symbol_quantity_list, periodic_table_dict):
-#return float
-    pass
+    molar_mass = 0
+    
+    for atom in symbol_quantity_list:
+        symbol = atom[0]
+        quantity = atom[1]
+        molar_mass += periodic_table_dict[symbol][1] * quantity
+    return molar_mass     
 
-
+def compute_number_of_moles(molar_mass, sample_size_grams):
+    return sample_size_grams / molar_mass   
+    
 def make_periodic_table():
     
     periodic_table_dict = {
